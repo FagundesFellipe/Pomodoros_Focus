@@ -41,12 +41,12 @@ yarn-error.log*
 next-env.d.ts
 
 # Claude
-.Claude
+.claude/
 
 # Opencode
-.Opencode
+.opencode/
 .mcp.json
 opencode.json
 
 # Taskmaster
-.taskmaster
+.taskmaster/
