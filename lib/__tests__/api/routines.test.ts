@@ -460,7 +460,7 @@ describe("DELETE /api/routines/[id]", () => {
     const deleteOrder: string[] = [];
     mockTransaction.mockImplementation(async (fn: (tx: unknown) => Promise<void>) => {
       const tx = {
-        delete: vi.fn().mockImplementation((table: { [Symbol.for("drizzle:Name")]: string }) => {
+        delete: vi.fn().mockImplementation((table: Record<symbol, string>) => {
           const name = table[Symbol.for("drizzle:Name")] ?? "unknown";
           deleteOrder.push(name);
           return { where: vi.fn().mockResolvedValue(undefined) };
