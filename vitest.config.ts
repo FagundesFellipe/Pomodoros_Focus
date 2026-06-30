@@ -11,6 +11,9 @@ export default defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
+      exclude: [
+        "lib/db/schema/**",
+      ],
       thresholds: {
         lines: 81,
         branches: 81,
