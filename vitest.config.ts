@@ -13,6 +13,7 @@ export default defineConfig({
       reporter: ["text", "lcov"],
       exclude: [
         "lib/db/schema/**",
+        "components/ui/**", // shadcn/ui generated primitives (third-party)
       ],
       thresholds: {
         lines: 81,
