@@ -17,7 +17,8 @@ export const routines = sqliteTable(
       .$defaultFn(() => new Date()),
     updatedAt: integer("updated_at", { mode: "timestamp" })
       .notNull()
-      .$defaultFn(() => new Date()),
+      .$defaultFn(() => new Date())
+      .$onUpdateFn(() => new Date()),
   },
   (table) => [index("routines_user_id_idx").on(table.userId)],
 );
