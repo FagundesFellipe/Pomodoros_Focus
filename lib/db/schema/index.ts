@@ -2,3 +2,4 @@
 // Import directly from "./users" only when needed for FK type references.
 export * from "./routines";
 export * from "./blocks";
+export * from "./relations";
