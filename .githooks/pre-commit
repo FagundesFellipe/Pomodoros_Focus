@@ -1,0 +1,45 @@
+#!/bin/sh
+# Pre-commit hook: roda as verificacoes do projeto e exige cobertura > 80%
+
+echo ""
+echo "========================================"
+echo "  Pre-commit: lint, typecheck e coverage"
+echo "========================================"
+echo ""
+
+if ! command -v npm >/dev/null 2>&1; then
+    echo "Erro: npm nao encontrado."
+    exit 1
+fi
+
+run_check() {
+    echo ""
+    echo ">>> $1"
+    if ! npm run "$1"; then
+        echo ""
+        echo "========================================"
+        echo "  COMMIT BLOQUEADO"
+        echo "  Motivo: '$1' falhou"
+        echo "========================================"
+        exit 1
+    fi
+}
+
+run_check lint
+run_check typecheck
+run_check test:coverage
+
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "========================================"
+    echo "  COMMIT BLOQUEADO"
+    echo "  Motivo: verificacoes falharam"
+    echo "========================================"
+    exit 1
+fi
+
+echo ""
+echo "========================================"
+echo "  Verificacoes OK - commit liberado"
+echo "========================================"
+exit 0
