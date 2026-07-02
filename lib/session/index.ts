@@ -6,3 +6,4 @@ export * from "./restore";
 export * from "./completion";
 export * from "./traditional";
 export * from "./sync";
+export * from "./prepare";
