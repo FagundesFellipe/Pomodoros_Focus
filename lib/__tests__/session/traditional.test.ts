@@ -1,8 +1,72 @@
 import { describe, it, expect } from "vitest";
-import { createTraditionalSession } from "@/lib/session/traditional";
+import {
+  createTraditionalSession,
+  generateTraditionalBlocks,
+} from "@/lib/session/traditional";
 import type { SessionConfig } from "@/lib/types/session";
 
 const defaultConfig: SessionConfig = { autoAdvance: false, soundEnabled: true };
+
+describe("generateTraditionalBlocks", () => {
+  it("generates cycles * 2 blocks", () => {
+    const blocks = generateTraditionalBlocks({
+      focusDurationMinutes: 25,
+      restDurationMinutes: 5,
+      cycles: 5,
+    });
+    expect(blocks).toHaveLength(10);
+  });
+
+  it("alternates focus/rest with sequential titles and positions", () => {
+    const blocks = generateTraditionalBlocks({
+      focusDurationMinutes: 25,
+      restDurationMinutes: 5,
+      cycles: 2,
+    });
+    expect(blocks.map((b) => b.type)).toEqual([
+      "focus",
+      "rest",
+      "focus",
+      "rest",
+    ]);
+    expect(blocks.map((b) => b.title)).toEqual([
+      "Focus 1",
+      "Rest 1",
+      "Focus 2",
+      "Rest 2",
+    ]);
+    expect(blocks.map((b) => b.position)).toEqual([0, 1, 2, 3]);
+  });
+
+  it("assigns unique ids to each block", () => {
+    const blocks = generateTraditionalBlocks({
+      focusDurationMinutes: 25,
+      restDurationMinutes: 5,
+      cycles: 3,
+    });
+    const ids = blocks.map((b) => b.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("gives focus and rest distinct backgrounds", () => {
+    const [focus, rest] = generateTraditionalBlocks({
+      focusDurationMinutes: 25,
+      restDurationMinutes: 5,
+      cycles: 1,
+    });
+    expect(focus.background).not.toBe(rest.background);
+  });
+
+  it("throws for invalid cycles", () => {
+    expect(() =>
+      generateTraditionalBlocks({
+        focusDurationMinutes: 25,
+        restDurationMinutes: 5,
+        cycles: 26,
+      }),
+    ).toThrow("Cycles must be between 1 and 25");
+  });
+});
 
 describe("createTraditionalSession", () => {
   it("creates correct number of blocks (cycles * 2)", () => {
